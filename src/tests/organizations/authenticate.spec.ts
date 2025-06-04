@@ -3,6 +3,7 @@ import { InMemoryOrganizationRepository } from '../../repositories/in-memory-rep
 import { AuthenticateUseCase } from '../../use-cases/organizations/authenticate-use-case'
 import { hash } from 'bcryptjs'
 import { InvalidCredentialsError } from '../../errors/invalid-credentials-error'
+import { makeOrganization } from '../factories/make-organization.factory'
 
 let organizationsRepository: InMemoryOrganizationRepository
 let sut: AuthenticateUseCase
@@ -14,14 +15,9 @@ describe('Authenticate Use Case', () => {
   })
 
   it('should be able authenticate organization', async () => {
-    const { email } = await organizationsRepository.create({
-      name: 'John Doe Organization',
-      email: 'johndoe@example.com',
-      cep: '12345-678',
-      address: '123 Main Street, City, State',
-      whatsapp: '+5511999999999',
-      password_hash: await hash('securePassword123', 6),
-    })
+    const { email } = await organizationsRepository.create(
+      makeOrganization({ password: await hash('securePassword123', 6) }),
+    )
 
     const { organization } = await sut.execute({
       email,
@@ -32,14 +28,9 @@ describe('Authenticate Use Case', () => {
   })
 
   it('should be not able authenticate with inexistent e-mail', async () => {
-    await organizationsRepository.create({
-      name: 'John Doe Organization',
-      email: 'johndoe@example.com',
-      cep: '12345-678',
-      address: '123 Main Street, City, State',
-      whatsapp: '+5511999999999',
-      password_hash: await hash('securePassword123', 6),
-    })
+    await organizationsRepository.create(
+      makeOrganization({ password: await hash('securePassword123', 6) }),
+    )
 
     await expect(async () => {
       await sut.execute({
@@ -50,14 +41,9 @@ describe('Authenticate Use Case', () => {
   })
 
   it('should be not able authenticate with wrong password', async () => {
-    await organizationsRepository.create({
-      name: 'John Doe Organization',
-      email: 'johndoe@example.com',
-      cep: '12345-678',
-      address: '123 Main Street, City, State',
-      whatsapp: '+5511999999999',
-      password_hash: await hash('securePassword123', 6),
-    })
+    await organizationsRepository.create(
+      makeOrganization({ password: await hash('securePassword123', 6) }),
+    )
 
     await expect(async () => {
       await sut.execute({
