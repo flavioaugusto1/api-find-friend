@@ -8,7 +8,10 @@ interface CreateOrganizationsUseCaseRequest {
   name: string
   email: string
   cep: string
-  address: string
+  state: string
+  city: string
+  street: string
+  neighborhood: string
   whatsapp: string
   password: string
   confirm_password: string
@@ -25,7 +28,10 @@ export class CreateOrganizationsUseCase {
     name,
     email,
     cep,
-    address,
+    city,
+    neighborhood,
+    state,
+    street,
     whatsapp,
     password,
     confirm_password,
@@ -47,7 +53,10 @@ export class CreateOrganizationsUseCase {
       name,
       email,
       cep,
-      address,
+      city,
+      neighborhood,
+      state,
+      street,
       whatsapp,
       password_hash: password_hashed,
     })
