@@ -11,5 +11,6 @@ export interface SearchPets {
 
 export interface PetRepository {
   create(data: Prisma.PetUncheckedCreateInput): Promise<Pet>
+  getPetById(id: string): Promise<Pet | null>
   searchPets(data: SearchPets): Promise<Pet[]>
 }
