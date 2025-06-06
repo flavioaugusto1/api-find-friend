@@ -36,7 +36,7 @@ export async function createOrganizationController(
     organizationRepository,
   )
 
-  const organization = await createOrganizationsUseCase.execute(data)
+  const { organization } = await createOrganizationsUseCase.execute(data)
 
   return response.status(201).send({ organization })
 }
